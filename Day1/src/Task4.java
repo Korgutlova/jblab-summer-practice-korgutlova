@@ -7,17 +7,17 @@ public class Task4 {
         for(int i = 0; i < n; i++){
             arr[i] = rn.nextInt(100) - 50;
         }
-        int sum_even = 0;
+        int sumEven = 0;
         long multi = 1;
         for(int i = 0; i < n; i++){
             if(arr[i] % 2 == 0) {
-                sum_even = sum_even + arr[i];
+                sumEven = sumEven + arr[i];
             }
             if(arr[i] > 0) {
                 multi = multi * arr[i];
             }
         }
-        System.out.println(sum_even);
+        System.out.println(sumEven);
         System.out.println(multi);
     }
 }
