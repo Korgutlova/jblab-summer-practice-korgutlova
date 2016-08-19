@@ -5,7 +5,7 @@ public class Logger {
     private Logger() {
     }
 
-    public static synchronized Logger getLogger() {
+    public static Logger getLogger() {
         if (logger == null) {
             synchronized (Logger.logger) {
                 if (logger == null) {
