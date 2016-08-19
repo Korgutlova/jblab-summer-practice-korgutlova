@@ -1,12 +1,14 @@
 public class CreditCard {
-    private static CreditCard card = new CreditCard();
+    private static CreditCard card;
     private int money = 0;
 
     private CreditCard() {
     }
 
-    public static CreditCard getCard() {
-        return CreditCard.card;
+    public static synchronized CreditCard getCard() {
+        if (card == null)
+            card = new CreditCard();
+        return card;
     }
 
     public void addMoney(int x) {
