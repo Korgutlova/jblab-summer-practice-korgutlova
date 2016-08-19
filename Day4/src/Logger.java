@@ -6,8 +6,13 @@ public class Logger {
     }
 
     public static synchronized Logger getLogger() {
-        if (logger == null)
-            logger = new Logger();
+        if (logger == null) {
+            synchronized (Logger.logger) {
+                if (logger == null) {
+                    logger = new Logger();
+                }
+            }
+        }
         return logger;
     }
 

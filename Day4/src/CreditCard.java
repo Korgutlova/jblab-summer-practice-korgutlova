@@ -5,9 +5,14 @@ public class CreditCard {
     private CreditCard() {
     }
 
-    public static synchronized CreditCard getCard() {
-        if (card == null)
-            card = new CreditCard();
+    public static CreditCard getCard() {
+        if (card == null) {
+            synchronized (CreditCard.card) {
+                if (card == null) {
+                    card = new CreditCard();
+                }
+            }
+        }
         return card;
     }
 
