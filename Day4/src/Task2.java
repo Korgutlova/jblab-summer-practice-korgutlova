@@ -6,17 +6,9 @@ public class Task2 {
             k = x % 2;
             switch (k) {
                 case 0:
-                case 2:
-                case 4:
-                case 6:
-                case 8:
                     System.out.println(x + " c");
                     break;
                 case 1:
-                case 3:
-                case 5:
-                case 7:
-                case 9:
                     System.out.println(x + " n");
                     break;
             }
