@@ -1,39 +1,62 @@
 package Iterator;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 public class RangeCollection implements MyCollection {
 
-    private List<Integer> list = new ArrayList<Integer>();
+    private Set<Integer> removed = new LinkedHashSet<Integer>();
     private int min = 0;
     private int max;
+    private int length;
 
     public RangeCollection(int max) {
         this.max = max;
+        this.length = max - min + 1;
     }
 
     public RangeCollection(int min, int max) {
         this.min = min;
         this.max = max;
-    }
-
-    public boolean add(int a) {
-        if (a <= 0) {
-            return false;
-        } else {
-            list.add(a);
-            return true;
-        }
+        this.length = max - min + 1;
     }
 
     public void remove(int index) {
-        list.remove(index);
+        removed.add(index);
     }
 
     public String toString() {
-        return list.toString();
+        String s = "";
+        int i = 0;
+        while (i < length) {
+            i = skip(i);
+            if (i < length) {
+                s = s + (min + i) + " ";
+            }
+            i++;
+        }
+        return s;
+    }
+
+    public int skipInfinity(int index) {
+        if (index >= length) {
+            index = 0;
+        }
+        while (removed.contains(index)) {
+            index++;
+            if (index >= length) {
+                index = 0;
+            }
+        }
+        return index;
+    }
+
+    public int skip(int index) {
+        while (removed.contains(index)) {
+            index++;
+        }
+        return index;
     }
 
     public void setMin(int min) {
@@ -45,20 +68,16 @@ public class RangeCollection implements MyCollection {
     }
 
     @Override
-    public Iterator iterator() {
-        if (list.size() < max) {
-            System.out.println("Elements is less than the value of max. Max value is changed to " + list.size());
-            max = list.size() - 1;
-        }
-        return new MyIterator();
+    public Iterator<Integer> iterator() {
+        return new MyIterator<Integer>();
     }
 
-    private class MyIterator implements Iterator {
-        private int index = min;
+    private class MyIterator<T> implements Iterator<T> {
+        private int index = 0;
 
         @Override
         public boolean hasNext() {
-            if (list.isEmpty()) {
+            if (removed.size() == length) {
                 throw new NoSuchElementException("Collection is empty");
             }
             return true;
@@ -67,31 +86,18 @@ public class RangeCollection implements MyCollection {
         @Override
         public Object next() {
             if (hasNext()) {
-                int a;
-                if (index > list.size() || min == list.size()) {
-                    throw new NoSuchElementException("Collection is empty the interval from " + min + " , " + max);
-                } else if (index == list.size()) {
-                    index = min;
-                    a = list.get(index);
-                } else if (index == max) {
-                    a = list.get(index);
-                    index = min;
-                } else {
-                    a = list.get(index);
-                    index++;
-                }
+                index = skipInfinity(index);
+                int a = min + index;
+                index++;
                 return a;
-
             }
             return null;
         }
 
         @Override
         public void remove() {
-            if (index >= list.size()) {
-                index = min;
-            }
-            list.remove(index);
+            index = skipInfinity(index);
+            removed.add(index);
         }
     }
 }

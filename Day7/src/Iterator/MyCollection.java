@@ -1,5 +1,5 @@
 package Iterator;
 
 public interface MyCollection {
-    Iterator iterator();
+    Iterator<Integer> iterator();
 }
