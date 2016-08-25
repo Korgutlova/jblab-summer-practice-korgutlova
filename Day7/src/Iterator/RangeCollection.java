@@ -79,6 +79,8 @@ public class RangeCollection implements MyCollection {
         public boolean hasNext() {
             if (removed.size() == length) {
                 throw new NoSuchElementException("Collection is empty");
+            } else if (index == length && min != 0) {
+                return false;
             }
             return true;
         }
@@ -86,8 +88,14 @@ public class RangeCollection implements MyCollection {
         @Override
         public Object next() {
             if (hasNext()) {
-                index = skipInfinity(index);
-                int a = min + index;
+                int a = 0;
+                if (min == 0) {
+                    index = skipInfinity(index);
+                } else {
+                    index = skip(index);
+                    a = min;
+                }
+                a += index;
                 index++;
                 return a;
             }
